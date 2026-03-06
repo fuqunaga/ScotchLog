@@ -5,7 +5,7 @@ namespace CategorizedLogging
     public class UnityLoggerSinkConfig : SinkConfigMonoBehaviour<UnityLoggerSink>
     {
         [Header("LogType per LogLevel Settings")]
-        public UnityLogTypeWithNone traceLogType = UnityLogTypeWithNone.None;	
+        public UnityLogTypeWithNone traceLogType = UnityLogTypeWithNone.Log;	
         public UnityLogTypeWithNone debugLogType = UnityLogTypeWithNone.Log;	
         public UnityLogTypeWithNone informationLogType = UnityLogTypeWithNone.Log;
         public UnityLogTypeWithNone warningLogType = UnityLogTypeWithNone.Warning;	

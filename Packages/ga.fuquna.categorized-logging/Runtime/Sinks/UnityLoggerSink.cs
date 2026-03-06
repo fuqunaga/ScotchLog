@@ -12,7 +12,7 @@ namespace CategorizedLogging
         
         public ConcurrentDictionary<LogLevel, LogType?> LogLevelToUnityLogTypeTable { get; } = new()
         {
-            [LogLevel.Trace] = null,
+            [LogLevel.Trace] = LogType.Log,
             [LogLevel.Debug] = LogType.Log,
             [LogLevel.Information] = LogType.Log,
             [LogLevel.Warning] = LogType.Warning,
