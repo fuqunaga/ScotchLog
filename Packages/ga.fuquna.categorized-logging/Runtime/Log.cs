@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -11,13 +12,13 @@ namespace CategorizedLogging
     /// </summary>
     public static partial class Log
     {
-        [field:ThreadStatic] private static LogPropertyHolder _propertyHolder;
-        
-        
+        [field: ThreadStatic] private static LogPropertyHolder _propertyHolder;
+
+
         public static ILogDispatcher LogDispatcher { get; set; } = new LogDispatcher();
-        [field:ThreadStatic] public static ILogDispatcher ThreadLocalDispatcher { get; set; }
+        [field: ThreadStatic] public static ILogDispatcher ThreadLocalDispatcher { get; set; }
         public static LogPropertyHolder PropertyHolder => _propertyHolder ??= new LogPropertyHolder();
-        
+
 
         [HideInCallstack]
         private static void EmitLogInternal(in LogEntry logEntry)
@@ -25,7 +26,7 @@ namespace CategorizedLogging
             LogDispatcher?.Log(in logEntry);
             ThreadLocalDispatcher?.Log(in logEntry);
         }
-        
+
         [HideInCallstack]
         public static void EmitLog(in LogEntry logEntry)
         {
@@ -33,10 +34,10 @@ namespace CategorizedLogging
             {
                 var newEntry = new LogEntry(
                     logEntry.LogLevel,
-                    logEntry.Category,
-                    $"{PropertyHolder.ToLogString()} {logEntry.Message}"
+                    $"{PropertyHolder.ToLogString()} {logEntry.Message}",
+                    logEntry.CallerInfo
                 );
-                
+
                 EmitLogInternal(in newEntry);
             }
             else
@@ -45,32 +46,90 @@ namespace CategorizedLogging
             }
         }
 
-        [HideInCallstack] public static void EmitLog(string category, LogLevel logLevel, string message) => EmitLog(new LogEntry(logLevel, category, message));
-        [HideInCallstack] public static void EmitLog(Type typeForCategory, LogLevel logLevel, string message) => EmitLog(typeForCategory.Name, logLevel, message);
-        [HideInCallstack] public static void EmitLog<TCaller>(LogLevel logLevel, string message) => EmitLog(typeof(TCaller), logLevel, message);
-        [HideInCallstack] public static void EmitLog<TCaller>(TCaller _, LogLevel logLevel, string message) => EmitLog<TCaller>(logLevel, message);
+  
+        [HideInCallstack]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void EmitLog(LogLevel logLevel, string message, 
+            [CallerFilePath] string callerFilePath = "", 
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = ""
+            )
+        {
+            EmitLog(new LogEntry(logLevel, message,
+                new CallerInformation(callerFilePath, callerLineNumber, callerMemberName)));
+        }
+
+
+        [HideInCallstack]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Trace(string message,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = ""
+        )
+        {
+            EmitLog(new LogEntry(LogLevel.Trace, message,
+                new CallerInformation(callerFilePath, callerLineNumber, callerMemberName)));
+        }
+
+        [HideInCallstack]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Debug(string message,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = ""
+        )
+        {
+            EmitLog(new LogEntry(LogLevel.Debug, message,
+                new CallerInformation(callerFilePath, callerLineNumber, callerMemberName)));
+        }
         
-        
-        [HideInCallstack] public static void Trace(Type typeForCategory, string message)　=> EmitLog(typeForCategory, LogLevel.Trace, message);
-        [HideInCallstack] public static void Debug(Type typeForCategory, string message)　=> EmitLog(typeForCategory, LogLevel.Debug, message);
-        [HideInCallstack] public static void Information(Type typeForCategory, string message)　=> EmitLog(typeForCategory, LogLevel.Information, message);
-        [HideInCallstack] public static void Warning(Type typeForCategory, string message)　=> EmitLog(typeForCategory, LogLevel.Warning, message);
-        [HideInCallstack] public static void Error(Type typeForCategory, string message)　=> EmitLog(typeForCategory, LogLevel.Error, message);
-        [HideInCallstack] public static void Critical(Type typeForCategory, string message)　=> EmitLog(typeForCategory, LogLevel.Critical, message);
-        
-        [HideInCallstack] public static void Trace<TCaller>(string message) => Trace(typeof(TCaller), message);
-        [HideInCallstack] public static void Debug<TCaller>(string message) => Debug(typeof(TCaller), message);
-        [HideInCallstack] public static void Information<TCaller>(string message) => Information(typeof(TCaller), message);
-        [HideInCallstack] public static void Warning<TCaller>(string message) => Warning(typeof(TCaller), message);
-        [HideInCallstack] public static void Error<TCaller>(string message) => Error(typeof(TCaller), message);
-        [HideInCallstack] public static void Critical<TCaller>(string message) => Critical(typeof(TCaller), message);
-        
-        // 型推論で<TCaller>を指定しなくても済むようにするインターフェース
-        [HideInCallstack] public static void Trace<TCaller>(TCaller _, string message) => Trace<TCaller>(message);
-        [HideInCallstack] public static void Debug<TCaller>(TCaller _, string message) => Debug<TCaller>(message);
-        [HideInCallstack] public static void Information<TCaller>(TCaller _, string message) => Information<TCaller>(message);
-        [HideInCallstack] public static void Warning<TCaller>(TCaller _, string message) => Warning<TCaller>(message);
-        [HideInCallstack] public static void Error<TCaller>(TCaller _, string message) => Error<TCaller>(message);
-        [HideInCallstack] public static void Critical<TCaller>(TCaller _, string message) => Critical<TCaller>(message);
+        [HideInCallstack]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Information(string message,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = ""
+        )
+        {
+            EmitLog(new LogEntry(LogLevel.Information, message,
+                new CallerInformation(callerFilePath, callerLineNumber, callerMemberName)));
+        }
+
+        [HideInCallstack]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Warning(string message,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = ""
+        )
+        {
+            EmitLog(new LogEntry(LogLevel.Warning, message,
+                new CallerInformation(callerFilePath, callerLineNumber, callerMemberName)));
+        }
+
+        [HideInCallstack]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Error(string message,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = ""
+        )
+        {
+            EmitLog(new LogEntry(LogLevel.Error, message,
+                new CallerInformation(callerFilePath, callerLineNumber, callerMemberName)));
+        }
+
+        [HideInCallstack]
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static void Critical(string message,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMemberName = ""
+        )
+        {
+            EmitLog(new LogEntry(LogLevel.Critical, message,
+                new CallerInformation(callerFilePath, callerLineNumber, callerMemberName)));
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace CategorizedLogging.Samples
 
             var emitButton = UI.Button("Emit Log", () =>
             {
-                Log.EmitLog(this, logLevel, logMessage);
+                Log.EmitLog(logLevel, logMessage);
             });
 
 
@@ -56,7 +56,7 @@ namespace CategorizedLogging.Samples
                     var threadIndex = i;
                     Task.Run(() =>
                     {
-                        Log.EmitLog(this, logLevel, $"[Thread {threadIndex}] {logMessage}");
+                        Log.EmitLog(logLevel, $"[Thread {threadIndex}] {logMessage}");
                     });
                 }
             });

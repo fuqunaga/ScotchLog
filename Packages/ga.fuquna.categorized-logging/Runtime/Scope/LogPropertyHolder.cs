@@ -33,7 +33,7 @@ namespace CategorizedLogging
             var index = _contextList.FindIndex(pair => pair.propertyId == contextId);
             if (index < 0)
             {
-                Log.Warning(this, $"Trying to remove log context with id {contextId}, but it does not exist.");
+                Log.Warning($"Trying to remove log context with id {contextId}, but it does not exist.");
             }
             else
             {

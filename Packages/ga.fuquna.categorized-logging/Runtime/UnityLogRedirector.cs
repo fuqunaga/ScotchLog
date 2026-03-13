@@ -35,8 +35,6 @@ namespace CategorizedLogging
             
         }
         
-        public static string Category { get; set; } = "Unity";
-        
         public static ConcurrentDictionary<LogType, LogLevel> UnityLogTypeToLogLevelTable { get; } = new()
         {
             [LogType.Error] = LogLevel.Error,
@@ -50,7 +48,7 @@ namespace CategorizedLogging
         {
             if (UnityLogTypeToLogLevelTable.TryGetValue(type, out var logLevel) && logLevel != LogLevel.None)
             {
-                Log.EmitLog(Category, logLevel, condition);
+                Log.EmitLog(logLevel, condition);
             }
         }
     }

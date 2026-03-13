@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace CategorizedLogging
 {
@@ -6,15 +7,17 @@ namespace CategorizedLogging
     {
         public DateTime Timestamp { get; }
         public LogLevel LogLevel { get; }
-        public string Category { get; }
         public string Message { get; }
+        public CallerInformation CallerInfo { get; }
+        
+        public string Category => Path.GetFileNameWithoutExtension(CallerInfo.FilePath);
 
-        public LogEntry(LogLevel logLevel, string category, string message)
+        public LogEntry(LogLevel logLevel, string message, in CallerInformation callerInfoInformation)
         {
             Timestamp = DateTime.Now;
             LogLevel = logLevel;
-            Category = category;
             Message = message;
+            CallerInfo = callerInfoInformation;
         }
 
         public override string ToString()
