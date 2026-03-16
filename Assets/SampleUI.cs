@@ -73,7 +73,7 @@ namespace CategorizedLogging.Samples
         private static Element CreateUnityLogEmitUI()
         {
             var logMessage = "This is a sample Unity log message.";
-            var logType = LogType.Log;
+            var logType = LogType.Warning;
 
             var logMessageField = UI.TextArea(() => logMessage);
             var logTypeField = UI.Field(() => logType);
@@ -84,10 +84,14 @@ namespace CategorizedLogging.Samples
             });
 
             return　UI.Page(
-                UI.Toggle(nameof(UnityLogRedirector.Enabled), () => UnityLogRedirector.Enabled),
-                logMessageField,
-                logTypeField,
-                emitButton
+                UI.Label($"<b>{nameof(UnityLogRedirector)}</b>"),
+                UI.Indent(
+                    UI.HelpBox("Debug.Log()などのUnityのログ出力をCategorized Loggingにリダイレクトします"),
+                    UI.Toggle(nameof(UnityLogRedirector.Enabled), () => UnityLogRedirector.Enabled),
+                    logMessageField,
+                    logTypeField,
+                    emitButton
+                )
             );
         }
 
@@ -133,7 +137,7 @@ namespace CategorizedLogging.Samples
  
             void UpdateLogField()
             {
-                logText = string.Join(Environment.NewLine, memorySink.LogEntries.Select(entry => entry.ToString()));
+                logText = string.Join(Environment.NewLine, memorySink.LogEntries.Select(record => record.ToString()));
             }
         }
     }
