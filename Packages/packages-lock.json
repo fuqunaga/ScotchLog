@@ -165,8 +165,8 @@
       "dependencies": {},
       "url": "https://registry.npmjs.com"
     },
-    "ga.fuquna.scorpion-log": {
-      "version": "file:ga.fuquna.scorpion-log",
+    "ga.fuquna.scotch-log": {
+      "version": "file:ga.fuquna.scotch-log",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

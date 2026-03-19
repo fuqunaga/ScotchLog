@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using RosettaUI;
 using UnityEngine;
 
-namespace ScorpionLog.Samples
+namespace ScotchLog.Samples
 {
     public class SampleUI : MonoBehaviour
     {
@@ -86,7 +86,7 @@ namespace ScorpionLog.Samples
             return　UI.Page(
                 UI.Label($"<b>{nameof(UnityLogRedirector)}</b>"),
                 UI.Indent(
-                    UI.HelpBox($"Debug.Log()などのUnityのログ出力を{nameof(ScorpionLog)}にリダイレクトします"),
+                    UI.HelpBox($"Debug.Log()などのUnityのログ出力を{nameof(ScotchLog)}にリダイレクトします"),
                     UI.Toggle(nameof(UnityLogRedirector.Enabled), () => UnityLogRedirector.Enabled),
                     logMessageField,
                     logTypeField,

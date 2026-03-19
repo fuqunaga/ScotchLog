@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-namespace ScorpionLog.Test.Editor
+namespace ScotchLog.Test.Editor
 {
     public class AllocationLog
     {

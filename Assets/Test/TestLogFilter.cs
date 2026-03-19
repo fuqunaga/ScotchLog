@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using ScorpionLog.Scope;
+using ScotchLog.Scope;
 
-namespace ScorpionLog.Test.Editor
+namespace ScotchLog.Test.Editor
 {
     public class TestLogFilter
     {
