@@ -12,7 +12,7 @@
     "email": "fukhid@gmail.com",
     "url": "https://fuquna.ga"
   },
-  "description": "SCOpe-based Telemetry Concept Hierarchy Log.",
+  "description": "SCOTCH (SCOpe-based Telemetry Concept Hierarchy) logging library for Unity.",
   "repository": {
     "url": "https://github.com/fuqunaga/ScorpionLog"
   },
